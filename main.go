@@ -82,13 +82,13 @@ func (println PrintMesh) GetMesh() string {
 func main() {
 
 	var s string
-	s = GetInput(s)
-
 	mesh := PrintMesh{
 		messageUpper: strings.ToUpper("Enter Chosen Route: "),
 	}
 
 	fmt.Println(mesh.GetMesh())
+
+	s = GetInput(s)
 
 	sleep := SLEEP{
 		Time: 3.0,
@@ -104,22 +104,28 @@ func main() {
 			},
 		}
 
-		for key, val := range commandsSender.SIZE {
+		for i := range 1 {
+			for key, val := range commandsSender.SIZE {
+				i += 1
 
-			var file INTERMesh
+				var file INTERMesh
 
-			file = Setup{
-				argsPassed: key,
-				commands:   val,
+				file = Setup{
+					argsPassed: key,
+					commands:   val,
+				}
+
+				sleep.Sleep()
+
+				fmt.Println(i, key, ":", val)
+
+				file.getPrintln()
 			}
 
-			sleep.Sleep()
-			fmt.Println(file.getPrintln())
 		}
-
 	}
 
 	commands.Commands()
-	fmt.Scanln()
 	mesh.GetMesh()
+	fmt.Scanln()
 }
