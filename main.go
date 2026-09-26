@@ -123,6 +123,42 @@ func (emptyStringValue EmptyTextMesh) CheckEmptyValue() bool {
 	return emptyStringValue.isEmptyMeshCleared != ""
 }
 
+type UILabelStyle string
+
+type lineStringMesh struct {
+	isLoadedOnUIChanged bool
+	linesUI             UILabelStyle
+}
+
+type PositionsChanged struct {
+	posX float64
+	posY float64
+	posZ float64
+}
+
+func GetPositions() float64 {
+
+	positions := PositionsChanged{
+		posX: 40.0,
+		posY: 2.0,
+		posZ: 0,
+	}
+
+	return float64(positions.posX*positions.posY/2) / 2 * 2
+
+}
+
+func (styledLabelUI lineStringMesh) GetUIChanged() string {
+	if styledLabelUI.isLoadedOnUIChanged {
+
+		for i := 0; i < int(GetPositions()); i++ {
+			fmt.Print("-")
+		}
+	}
+
+	return string("-\n")
+}
+
 func main() {
 
 	var s string
@@ -130,6 +166,14 @@ func main() {
 	baseMeshes := BaseMeshes{
 		isCatching: true,
 	}
+
+	MeshUIChanged := lineStringMesh{
+		isLoadedOnUIChanged: true,
+	}
+
+	MeshUIChanged.GetUIChanged()
+
+	fmt.Println("")
 
 	for baseMeshes.GetBaseMesh() {
 
@@ -195,8 +239,13 @@ func main() {
 			}
 
 			commands.Commands()
+
+			MeshUIChanged.GetUIChanged()
+
 			mesh.GetMesh()
 			fmt.Scanln()
+
 		}
+
 	}
 }
