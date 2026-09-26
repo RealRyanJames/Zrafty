@@ -148,6 +148,54 @@ func GetPositions() float64 {
 
 }
 
+type DateLoggerMesh struct {
+	isHourlyDay bool
+	isMorning   bool
+	isAfternoon bool
+	isEvening   bool
+}
+
+type TimeOfDay struct {
+	morning   bool
+	afternoon bool
+	evening   bool
+}
+
+type DateLoggingSystem struct {
+	date any
+}
+
+func (date DateLoggingSystem) GetDate() any {
+	return date.date
+}
+
+func (dateLoggerMesh DateLoggerMesh) GetDateMesh() string {
+	timeOfDay := TimeOfDay{
+		morning:   time.Now().Hour() < 11,
+		afternoon: time.Now().Hour() > 11 && time.Now().Hour() < 16,
+		evening:   time.Now().Hour() > 16,
+	}
+
+	isMorning := timeOfDay.morning
+	isAfternoon := timeOfDay.afternoon
+	isEvening := timeOfDay.evening
+
+	if isMorning {
+		return strings.ToUpper("Good Morning User")
+	}
+
+	if isAfternoon {
+
+		return strings.ToUpper("Good Afternoon User")
+	}
+
+	if isEvening {
+		return strings.ToUpper("Good Evening User")
+	}
+
+	return ""
+}
+
 func (styledLabelUI lineStringMesh) GetUIChanged() string {
 	if styledLabelUI.isLoadedOnUIChanged {
 
@@ -176,6 +224,16 @@ func main() {
 	fmt.Println("")
 
 	for baseMeshes.GetBaseMesh() {
+
+		dateNow := DateLoggerMesh{
+			isMorning:   time.Now().Hour() < 11,
+			isAfternoon: time.Now().Hour() > 11 && time.Now().Hour() < 17,
+			isEvening:   time.Now().Hour() > 18,
+		}
+
+		fmt.Println(strings.ToUpper(time.Now().Month().String()), "/", time.Now().Day(), "/", time.Now().Year())
+
+		fmt.Println(dateNow.GetDateMesh())
 
 		mesh := PrintMesh{
 			messageUpper: strings.ToUpper("Enter Chosen Route: "),
