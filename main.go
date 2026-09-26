@@ -99,13 +99,28 @@ type MeshIncludesText struct {
 func (meshesLengthLoaded MeshIncludesText) GetLoadedMeshes() string {
 	m := PrintMesh{}
 
-	if meshesLengthLoaded.isLoaded {
+	if meshesLengthLoaded.isLoaded && strings.Contains(meshesLengthLoaded.TextMeshes, "Break") {
 		meshesLengthLoaded.TextMeshes = strings.ToUpper("Loaded Text")
-	} else if strings.Contains(meshesLengthLoaded.TextMeshes, "Break") {
 		return m.GetMesh()
 	}
 
 	return string(meshesLengthLoaded.TextMeshes)
+}
+
+type EmptyTextMesh struct {
+	isEmptyMeshCleared string
+}
+
+func (emptyStringValue EmptyTextMesh) CheckEmptyValue() bool {
+
+	if emptyStringValue.isEmptyMeshCleared == "" {
+
+		fmt.Println(strings.ToUpper("Input is: Empty Value"))
+	}
+
+	fmt.Println(strings.ToUpper("Input is Not Empty Value"))
+
+	return emptyStringValue.isEmptyMeshCleared != ""
 }
 
 func main() {
@@ -135,43 +150,53 @@ func main() {
 			Time: 3.0,
 		}
 
-		isMeshTextContains.GetLoadedMeshes()
-
-		if strings.Contains(string(s), "/") {
-
-			commandsSender := MeshLength{
-				SIZE: map[string]string{
-					"Home":    "/",
-					"Math":    "/math",
-					"Counter": "/counter",
-				},
-			}
-
-			for i := range 1 {
-				for key, val := range commandsSender.SIZE {
-					i += 1
-
-					var file INTERMesh
-
-					file = Setup{
-						argsPassed: key,
-						commands:   val,
-					}
-
-					sleep.Sleep()
-
-					fmt.Println(i, key, ":", val)
-
-					file.getPrintln()
-				}
-
-			}
-
+		emptyTextMesh := EmptyTextMesh{
+			isEmptyMeshCleared: s,
 		}
 
-		baseMeshes.isCatching = bool(false)
-		commands.Commands()
-		mesh.GetMesh()
-		fmt.Scanln()
+		for emptyTextMesh.CheckEmptyValue() {
+
+			fmt.Println(mesh.GetMesh())
+			isMeshTextContains.GetLoadedMeshes()
+
+			if strings.Contains(string(s), "/") {
+
+				commandsSender := MeshLength{
+					SIZE: map[string]string{
+						"Home":    "/",
+						"Math":    "/math",
+						"Counter": "/counter",
+					},
+				}
+
+				for i := range 1 {
+					for key, val := range commandsSender.SIZE {
+						i += 1
+
+						var file INTERMesh
+
+						file = Setup{
+							argsPassed: key,
+							commands:   val,
+						}
+
+						sleep.Sleep()
+
+						fmt.Println(i, key, ":", val)
+
+						file.getPrintln()
+					}
+
+				}
+
+			} else {
+
+				emptyTextMesh.CheckEmptyValue()
+			}
+
+			commands.Commands()
+			mesh.GetMesh()
+			fmt.Scanln()
+		}
 	}
 }
