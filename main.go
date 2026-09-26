@@ -79,53 +79,99 @@ func (println PrintMesh) GetMesh() string {
 	return println.messageUpper
 }
 
+type BaseMeshes struct {
+	isCatching bool
+}
+
+func (baseMeshes BaseMeshes) GetBaseMesh() bool {
+	if baseMeshes.isCatching {
+		return baseMeshes.isCatching
+	}
+
+	return true
+}
+
+type MeshIncludesText struct {
+	isLoaded   bool
+	TextMeshes string
+}
+
+func (meshesLengthLoaded MeshIncludesText) GetLoadedMeshes() string {
+	m := PrintMesh{}
+
+	if meshesLengthLoaded.isLoaded {
+		meshesLengthLoaded.TextMeshes = strings.ToUpper("Loaded Text")
+	} else if strings.Contains(meshesLengthLoaded.TextMeshes, "Break") {
+		return m.GetMesh()
+	}
+
+	return string(meshesLengthLoaded.TextMeshes)
+}
+
 func main() {
 
 	var s string
-	mesh := PrintMesh{
-		messageUpper: strings.ToUpper("Enter Chosen Route: "),
+
+	baseMeshes := BaseMeshes{
+		isCatching: true,
 	}
 
-	fmt.Println(mesh.GetMesh())
+	for baseMeshes.GetBaseMesh() {
 
-	s = GetInput(s)
-
-	sleep := SLEEP{
-		Time: 3.0,
-	}
-
-	if strings.Contains(string(s), "/") {
-
-		commandsSender := MeshLength{
-			SIZE: map[string]string{
-				"Home":    "/",
-				"Math":    "/math",
-				"Counter": "/counter",
-			},
+		mesh := PrintMesh{
+			messageUpper: strings.ToUpper("Enter Chosen Route: "),
 		}
 
-		for i := range 1 {
-			for key, val := range commandsSender.SIZE {
-				i += 1
+		fmt.Println(mesh.GetMesh())
 
-				var file INTERMesh
+		s = GetInput(s)
 
-				file = Setup{
-					argsPassed: key,
-					commands:   val,
+		isMeshTextContains := MeshIncludesText{
+			isLoaded:   bool(baseMeshes.isCatching),
+			TextMeshes: s,
+		}
+
+		sleep := SLEEP{
+			Time: 3.0,
+		}
+
+		isMeshTextContains.GetLoadedMeshes()
+
+		if strings.Contains(string(s), "/") {
+
+			commandsSender := MeshLength{
+				SIZE: map[string]string{
+					"Home":    "/",
+					"Math":    "/math",
+					"Counter": "/counter",
+				},
+			}
+
+			for i := range 1 {
+				for key, val := range commandsSender.SIZE {
+					i += 1
+
+					var file INTERMesh
+
+					file = Setup{
+						argsPassed: key,
+						commands:   val,
+					}
+
+					sleep.Sleep()
+
+					fmt.Println(i, key, ":", val)
+
+					file.getPrintln()
 				}
 
-				sleep.Sleep()
-
-				fmt.Println(i, key, ":", val)
-
-				file.getPrintln()
 			}
 
 		}
-	}
 
-	commands.Commands()
-	mesh.GetMesh()
-	fmt.Scanln()
+		baseMeshes.isCatching = bool(false)
+		commands.Commands()
+		mesh.GetMesh()
+		fmt.Scanln()
+	}
 }
