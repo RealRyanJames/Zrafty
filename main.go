@@ -2,6 +2,7 @@ package main
 
 import (
 	commands "commands_app/Commands"
+	extra "commands_app/Extrra"
 	"errors"
 	"fmt"
 	"os"
@@ -207,6 +208,12 @@ func (styledLabelUI lineStringMesh) GetUIChanged() string {
 	return string("-\n")
 }
 
+type NowTimeMesh = string
+
+type ErrorLines struct {
+	lineOnError []NowTimeMesh
+}
+
 func main() {
 
 	var s string
@@ -229,6 +236,15 @@ func main() {
 			isMorning:   time.Now().Hour() < 11,
 			isAfternoon: time.Now().Hour() > 11 && time.Now().Hour() < 17,
 			isEvening:   time.Now().Hour() > 18,
+		}
+
+		r := extra.CustomType{
+			MeshVersion: []string{"Current Version: ", "v1.", "0.", "0\n"},
+			MeshLogger:  []string{},
+		}
+
+		for _, val := range r.MeshVersion {
+			fmt.Print(val)
 		}
 
 		fmt.Println(strings.ToUpper(time.Now().Month().String()), "/", time.Now().Day(), "/", time.Now().Year())
