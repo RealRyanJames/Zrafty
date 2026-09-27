@@ -3,8 +3,11 @@ package main
 import (
 	commands "commands_app/Commands"
 	extra "commands_app/Extrra"
+	functtions "commands_app/Functtions"
+	routes "commands_app/Routes"
 	"errors"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 	"time"
@@ -40,12 +43,6 @@ func (sleep SLEEP) Sleep() {
 
 		time.Sleep(time.Duration(sleep.Time) * time.Second)
 	}
-}
-
-func GetInput(str string) string {
-
-	fmt.Scan(&str)
-	return str
 }
 
 type PrintMesh struct {
@@ -87,9 +84,10 @@ type BaseMeshes struct {
 func (baseMeshes BaseMeshes) GetBaseMesh() bool {
 	if baseMeshes.isCatching {
 		return baseMeshes.isCatching
+	} else {
+		return false
 	}
 
-	return true
 }
 
 type MeshIncludesText struct {
@@ -114,14 +112,7 @@ type EmptyTextMesh struct {
 
 func (emptyStringValue EmptyTextMesh) CheckEmptyValue() bool {
 
-	if emptyStringValue.isEmptyMeshCleared == "" {
-
-		fmt.Println(strings.ToUpper("Input is: Empty Value"))
-	}
-
-	fmt.Println(strings.ToUpper("Input is Not Empty Value"))
-
-	return emptyStringValue.isEmptyMeshCleared != ""
+	return emptyStringValue.isEmptyMeshCleared == ""
 }
 
 type UILabelStyle string
@@ -214,6 +205,26 @@ type ErrorLines struct {
 	lineOnError []NowTimeMesh
 }
 
+type PickedOperationMesh struct {
+	PickedDrawOPSize []string
+	isKnownSize      bool
+}
+
+func (opPicked PickedOperationMesh) GetPickedOperator() string {
+
+	if opPicked.isKnownSize {
+
+		str_op := []string{"+", "-", "*"}
+		r_op := len(str_op)
+
+		selected_op_len := rand.Intn(r_op)
+
+		return str_op[selected_op_len]
+	}
+
+	return string("")
+}
+
 func main() {
 
 	var s string
@@ -256,70 +267,113 @@ func main() {
 		}
 
 		fmt.Println(mesh.GetMesh())
+		fmt.Scanln(&s)
 
-		s = GetInput(s)
+		if strings.Contains(s, "/Math") {
 
-		isMeshTextContains := MeshIncludesText{
-			isLoaded:   bool(baseMeshes.isCatching),
-			TextMeshes: s,
-		}
+			num1 := routes.GetIniialRoute()
 
-		sleep := SLEEP{
-			Time: 3.0,
-		}
+			OP_PICKED := PickedOperationMesh{
+				isKnownSize: true,
+			}
+			op := OP_PICKED.GetPickedOperator()
 
-		emptyTextMesh := EmptyTextMesh{
-			isEmptyMeshCleared: s,
-		}
+			answer := 0
+			fmt.Printf("What is: %d %s %d\n", num1.NUM1, op, num1.NUM2)
+			fmt.Scanln(&answer)
 
-		for emptyTextMesh.CheckEmptyValue() {
+			if op == "+" && answer == functtions.Add(int(num1.NUM1), int(num1.NUM2)) {
 
-			fmt.Println(mesh.GetMesh())
-			isMeshTextContains.GetLoadedMeshes()
+				fmt.Println(strings.ToUpper("Correct Answer Good Job!"))
+			}
 
-			if strings.Contains(string(s), "/") {
+			if op == "+" && answer != functtions.Add(int(num1.NUM1), int(num1.NUM2)) {
 
-				commandsSender := MeshLength{
-					SIZE: map[string]string{
-						"Home":    "/",
-						"Math":    "/math",
-						"Counter": "/counter",
-					},
-				}
+				fmt.Println(strings.ToUpper("Incorrect Answer Please Try Again Next Time?"))
+			}
 
-				for i := range 1 {
-					for key, val := range commandsSender.SIZE {
-						i += 1
+			if op == "-" && answer == functtions.Sub(int(num1.NUM1), int(num1.NUM2)) {
 
-						var file INTERMesh
+				fmt.Println(strings.ToUpper("Correct Answer Good Job!"))
+			}
 
-						file = Setup{
-							argsPassed: key,
-							commands:   val,
+			if op == "-" && answer != functtions.Sub(int(num1.NUM1), int(num1.NUM2)) {
+
+				fmt.Println(strings.ToUpper("Incorrect Answer Please Try Again Next Time?"))
+			}
+
+			if op == "*" && answer == functtions.Multiply(int(num1.NUM1), int(num1.NUM2)) {
+
+				fmt.Println(strings.ToUpper("Correct Answer Good Job!"))
+			}
+
+			if op == "*" && answer != functtions.Multiply(int(num1.NUM1), int(num1.NUM2)) {
+
+				fmt.Println(strings.ToUpper("Incorrect Answer Please Try Again Next Time?"))
+			}
+
+		} else {
+
+			isMeshTextContains := MeshIncludesText{
+				isLoaded:   bool(baseMeshes.isCatching),
+				TextMeshes: s,
+			}
+
+			sleep := SLEEP{
+				Time: 3.0,
+			}
+
+			emptyTextMesh := EmptyTextMesh{
+				isEmptyMeshCleared: s,
+			}
+
+			if emptyTextMesh.CheckEmptyValue() {
+
+				break
+			} else {
+				fmt.Println(mesh.GetMesh())
+				isMeshTextContains.GetLoadedMeshes()
+
+				if strings.Contains(string(s), "/") {
+
+					commandsSender := MeshLength{
+						SIZE: map[string]string{
+							"Home":    "/",
+							"Math":    "/math",
+							"Counter": "/counter",
+						},
+					}
+
+					for i := range 1 {
+						for key, val := range commandsSender.SIZE {
+							i += 1
+
+							var file INTERMesh
+
+							file = Setup{
+								argsPassed: key,
+								commands:   val,
+							}
+
+							sleep.Sleep()
+
+							fmt.Println(i, key, ":", val)
+
+							file.getPrintln()
+
 						}
 
-						sleep.Sleep()
-
-						fmt.Println(i, key, ":", val)
-
-						file.getPrintln()
 					}
 
 				}
-
-			} else {
-
-				emptyTextMesh.CheckEmptyValue()
 			}
-
-			commands.Commands()
-
-			MeshUIChanged.GetUIChanged()
-
-			mesh.GetMesh()
-			fmt.Scanln()
 
 		}
 
+		commands.Commands()
+		baseMeshes.isCatching = false
+		MeshUIChanged.GetUIChanged()
+		fmt.Scanln()
 	}
+
 }

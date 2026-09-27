@@ -10,7 +10,7 @@ type RAND_NUMBER struct {
 	NUM2 NumMesh
 }
 
-func GetIniialRoute(route CustomRouteMesh) RAND_NUMBER {
+func GetIniialRoute() RAND_NUMBER {
 
 	numMesh := RAND_NUMBER{
 		NUM1: NumMesh(rand.Intn(6)),
